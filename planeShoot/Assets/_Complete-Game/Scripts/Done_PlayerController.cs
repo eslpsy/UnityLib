@@ -9,17 +9,22 @@ public class Done_Boundary
 
 public class Done_PlayerController : MonoBehaviour
 {
-	public float speed;
-	public float tilt;
-	public Done_Boundary boundary;
+	public float speed;                 // 玩家速度
+	public float tilt;                  // 左右平移偏转系数
+	public Done_Boundary boundary;      
 
-	public GameObject shot;
-	public Transform shotSpawn;
-	public float fireRate;
+	public GameObject shot;             // 子弹
+	public Transform shotSpawn;         // 子弹产生位置
+	public float fireRate;              // 子弹间隔事件
 	 
 	private float nextFire;
-	
-	void Update ()
+
+    private void Awake()
+    {
+        this.nextFire = 0;
+    }
+
+    void Update ()
 	{
 		if (Input.GetButton("Fire1") && Time.time > nextFire) 
 		{
@@ -37,9 +42,10 @@ public class Done_PlayerController : MonoBehaviour
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 		GetComponent<Rigidbody>().velocity = movement * speed;
 		
-		GetComponent<Rigidbody>().position = new Vector3
+		GetComponent<Rigidbody>().position = new Vector3    
 		(
-			Mathf.Clamp (GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax), 
+            // 在min和max中获得一个随机值
+            Mathf.Clamp (GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax), 
 			0.0f, 
 			Mathf.Clamp (GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax)
 		);
