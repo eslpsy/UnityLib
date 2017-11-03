@@ -5,20 +5,20 @@ using UnityEngine.UI;
 
 public class Done_GameController : MonoBehaviour
 {
-    public GameObject[] hazards;
-    public Vector3 spawnValues;
-    public int hazardCount;
-    public float spawnWait;
-    public float startWait;
-    public float waveWait;
+    public GameObject[] hazards;//敌人prefabs数组
+    public Vector3 spawnValues; //敌人创建的基础坐标
+    public int hazardCount;     //一波创建的敌人总数
+    public float spawnWait;     //创建陨石和敌人的间隔时间
+    public float startWait;     //开始游戏的等待时间
+    public float waveWait;      //到下一波石头和敌人创建的间隔时间
 
     public Text scoreText;
     public Text restartText;
     public Text gameOverText;
 
-    private bool gameOver;
+    private bool gameOver;      //gameOver和restart表示游戏进行的状态，可以设置成状态机
     private bool restart;
-    private int score;
+    private int score;          //得分
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class Done_GameController : MonoBehaviour
         gameOverText.text = "";
         score = 0;
         UpdateScore();
-        StartCoroutine(SpawnWaves());
+        StartCoroutine(SpawnWaves());   // 协程运行SpawnWaves函数
     }
 
     void Update()
@@ -37,14 +37,14 @@ public class Done_GameController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);   // 重新加载场景
             }
         }
     }
 
     IEnumerator SpawnWaves()
     {
-        yield return new WaitForSeconds(startWait);
+        yield return new WaitForSeconds(startWait); //等待startWait时间
         while (true)
         {
             for (int i = 0; i < hazardCount; i++)
@@ -57,7 +57,7 @@ public class Done_GameController : MonoBehaviour
             }
             yield return new WaitForSeconds(waveWait);
 
-            if (gameOver)
+            if (gameOver)   // 游戏结束，设置restart为true，跳出while循环
             {
                 restartText.text = "Press 'R' for Restart";
                 restart = true;
@@ -66,18 +66,18 @@ public class Done_GameController : MonoBehaviour
         }
     }
 
-    public void AddScore(int newScoreValue)
+    public void AddScore(int newScoreValue) // 增加分数
     {
         score += newScoreValue;
         UpdateScore();
     }
 
-    void UpdateScore()
+    void UpdateScore() // 更新分数显示
     {
         scoreText.text = "Score: " + score;
     }
 
-    public void GameOver()
+    public void GameOver()  //游戏结束接口
     {
         gameOverText.text = "Game Over!";
         gameOver = true;
